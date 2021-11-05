@@ -71,6 +71,7 @@ pipeline {
 	  steps {
 	    script {
 		  if ( "$PKG_FILE" != "latest" ) {
+		    def AUTOREL = "get-the-latest-package"
 	  	    sh """
 			  echo "the PKG_FILE is not latest"
 		      echo "so get the package ${PKG_FILE}"
@@ -79,6 +80,7 @@ pipeline {
 		      ls -lia
             """
           } else {
+		    def AUTOREL = "get-a-custom-package"
 		    sh """
 			  echo "the PKG_FILE IS latest"
 			  echo "so get latest"
@@ -87,6 +89,7 @@ pipeline {
 			  """
           }
 	    }
+		println "the AUTOREL is ${AUTOREL}"
       }
     }
   }
