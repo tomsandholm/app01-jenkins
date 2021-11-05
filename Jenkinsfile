@@ -78,6 +78,13 @@ pipeline {
 		      pwd
 		      ls -lia
             """
+          } else {
+		    sh """
+			  echo "the PKG_FILE IS latest"
+			  echo "so get latest"
+			  pwd
+			  ls -lia /tmp
+			  """
           }
 	    }
       }
