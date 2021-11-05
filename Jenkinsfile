@@ -73,7 +73,7 @@ pipeline {
 		  if ( "$PKG_FILE" != "latest" ) {
 	  	    sh """
 			  echo "the PKG_FILE is not latest"
-		      echo "so get the package"
+		      echo "so get the package ${PKG_FILE}"
               # this is comment in NOT LATEST
 		      pwd
 		      ls -lia
