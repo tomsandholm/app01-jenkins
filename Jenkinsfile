@@ -79,6 +79,7 @@ pipeline {
 		      pwd
 		      ls -lia
             """
+			println "AUTOREL is $AUTOREL"
           } else {
 		    def AUTOREL = "get-a-custom-package"
 		    sh """
@@ -87,8 +88,8 @@ pipeline {
 			  pwd
 			  ls -lia /tmp
 			  """
+			println "AUTOREL is $AUTOREL"
           }
-		  println "the AUTOREL is ${AUTOREL}"
 	    }
       }
     }
