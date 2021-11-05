@@ -88,8 +88,8 @@ pipeline {
 			  ls -lia /tmp
 			  """
           }
+		  println "the AUTOREL is ${AUTOREL}"
 	    }
-		println "the AUTOREL is ${AUTOREL}"
       }
     }
   }
