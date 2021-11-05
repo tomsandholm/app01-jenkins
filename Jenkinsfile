@@ -12,6 +12,16 @@ pipeline {
     timestamps();
   }
 
+  parameters {
+    string(
+	  description: """ \
+	    Whether to download a custom platform \
+		""",
+      defaultValue: 'latest',
+	  name: 'PKG_FILE'
+	)
+  }
+
   environment {
     CAUSE = "${currentBuild.getBuildCauses()[0].shortDescription}"
 	GIT_REPO_NAME = env.GIT_URL.replaceFirst(/^.*\/([^\/]+?).git$/, '$1')
