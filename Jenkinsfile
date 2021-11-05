@@ -68,17 +68,19 @@ pipeline {
 	}
 
 	stage('check PKG_FILE') {
-	  when ( "$PKG_FILE" != "latest" ) {
-		  steps {
-	  	    echo "the PKG_FILE is not latest"
-		    echo "so get the package"
-		    sh """
-                # this is comment in NOT LATEST
-		        pwd
-		        ls -lia
+	  steps {
+	    script {
+		  if ( "$PKG_FILE" != "latest" ) {
+	  	    sh """
+			  echo "the PKG_FILE is not latest"
+		      echo "so get the package"
+              # this is comment in NOT LATEST
+		      pwd
+		      ls -lia
             """
           }
-	  }
+	    }
+      }
     }
   }
   post {
