@@ -66,6 +66,20 @@ pipeline {
 		  echo "Value of PKG_FILE is ${PKG_FILE}"
       }	
 	}
+
+	stage('check PKG_FILE') {
+	  when ( "$PKG_FILE" != "latest" ) {
+	  	echo "the PKG_FILE is not latest"
+		echo "so get the package"
+		steps {
+		  sh """
+			  # this is comment in NOT LATEST
+		      pwd
+		      ls -lia
+          """
+        }
+	  }
+    }
   }
   post {
     always {
