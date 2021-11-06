@@ -1,5 +1,14 @@
 // vi:set nu ai ap aw smd showmatch tabstop=4 shiftwidth=4: 
 
+properties([
+  parameters([
+    [
+	  $class: 'ChoiceParameter',
+	  choiceType: 'PT_SINGLE_SELECT',
+	  name: 'Platform',
+	  script: [
+	    
+
 library 'jenkins-shared-library'
 
 def sayHello(String name = 'human') {
@@ -12,25 +21,6 @@ pipeline {
   agent any
   options {
     timestamps();
-  }
-
-  parameters {
-    string(
-      description: """ \
-        Whether to download a custom platform \
-        """,
-      defaultValue: 'latest',
-      name: 'PKG_FILE'
-    )
-	activeChoiceParam('Platform') {
-	  description('Select Platform Package')
-	  choiceType('RADIO')
-	  groovyScript {
-	    script("return['pkg_01.tar.gz','pkg_02.tar.gz','pkg_03.tar.gz','latest']")
-		fallbackScript('return ["error"]')
-	  }
-	}
-
   }
 
   environment {
@@ -74,6 +64,39 @@ pipeline {
           echo 'use single quotes Build caused by ${env.CAUSE}'
           echo "Value of PKG_FILE is ${PKG_FILE}"
       }    
+    }
+
+	stage('Parameters'){
+	  steps {
+	    script {
+		  properties([
+		    parameters([
+			  [$class: 'ChoiceParameter',
+			      choiceType: 'PT_SINGLE_SELECT',
+				  description: 'Select Platform',
+				  filterLength: 1,
+				  filterable: false,
+				  name: 'Platform',
+                  script: [
+                    $class: 'GroovyScript',
+                    fallbackScript: [
+                      classpath: [],
+                      sandbox: false,
+                      script:
+                        "return['could not get packages']"
+                    ],
+                    script: [
+					  classpath: [],
+					  sandbox: false,
+					  script: 
+					    "return['pkg_01.tar.gz,','pkg_02.tar.gz','pkg_03.tar.gz']"
+					]
+                 ]
+               ]
+             ]
+          ]
+        }
+      }
     }
 
     stage('check PKG_FILE') {
