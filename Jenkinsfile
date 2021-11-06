@@ -6,8 +6,8 @@ def sayHello(String name = 'human') {
   echo "Hello, ${name}"
 }
 
-def Choices() {
-  echo "['pkg_01','pkg_02','latest']"
+def getChoices() {
+   return ['pkg_01','pkg_02','latest']
 }
 
 pipeline {
