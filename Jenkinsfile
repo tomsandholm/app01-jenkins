@@ -6,6 +6,16 @@ def sayHello(String name = 'human') {
   echo "Hello, ${name}"
 }
 
+def findPKGs() {
+  def sout = new StringBuffer(), serr = new StringBuffer()
+  def proc = 'ls /var/lib/jenkins/packages'.execute()
+  proc.consumeProcessOutput(sout, serr)
+  proc.waitForOrKill(10000)
+  return sout.tokenize()
+}
+
+def PKGs = findPKGs().join('\n')
+
 pipeline {
   agent any
   options {
@@ -14,25 +24,26 @@ pipeline {
 
   parameters {
     string(
-	  description: """ \
-	    Whether to download a custom platform \
-		""",
+      description: """ \
+        Whether to download a custom platform \
+        """,
       defaultValue: 'latest',
-	  name: 'PKG_FILE'
-	)
+      name: 'PKG_FILE'
+    )
+	choice(name: 'Package', choices: PKGs)
   }
 
   environment {
     CAUSE = "${currentBuild.getBuildCauses()[0].shortDescription}"
-	GIT_REPO_NAME = env.GIT_URL.replaceFirst(/^.*\/([^\/]+?).git$/, '$1')
-	GIT_BRANCH_NAME = "${GIT_BRANCH.split('/').size() >1 ? GIT_BRANCH.split('/')[1..-1].join('/') : GIT_BRANCH}"
+    GIT_REPO_NAME = env.GIT_URL.replaceFirst(/^.*\/([^\/]+?).git$/, '$1')
+    GIT_BRANCH_NAME = "${GIT_BRANCH.split('/').size() >1 ? GIT_BRANCH.split('/')[1..-1].join('/') : GIT_BRANCH}"
   }
 
   stages {
 
     stage('checkout') {
       steps {
-		buildDescription "repo: ${env.GIT_REPO_NAME}  branch: ${env.GIT_BRANCH_NAME}"
+        buildDescription "repo: ${env.GIT_REPO_NAME}  branch: ${env.GIT_BRANCH_NAME}"
         checkout scm
       }
     }
@@ -57,40 +68,40 @@ pipeline {
       }
     }
 
-	stage('check parent') {
-	  steps {
-		  echo "Build caused by ${env.CAUSE}"
-		  echo 'use single quotes Build caused by ${env.CAUSE}'
-		  sayHello 'Thomas'
-		  helloWorld 'this is from the jenkins-shared-library'
-		  echo "Value of PKG_FILE is ${PKG_FILE}"
-      }	
-	}
+    stage('check parent') {
+      steps {
+          echo "Build caused by ${env.CAUSE}"
+          echo 'use single quotes Build caused by ${env.CAUSE}'
+          sayHello 'Thomas'
+          helloWorld 'this is from the jenkins-shared-library'
+          echo "Value of PKG_FILE is ${PKG_FILE}"
+      }    
+    }
 
-	stage('check PKG_FILE') {
-	  steps {
-	    script {
-		  if ( "$PKG_FILE" != "latest" ) {
-		    def AUTOREL = "get-a-custom-package"
-	  	    sh """
-			  echo "the PKG_FILE is not latest"
-		      echo "so get the package ${PKG_FILE}"
+    stage('check PKG_FILE') {
+      steps {
+        script {
+          if ( "$PKG_FILE" != "latest" ) {
+            def AUTOREL = "DOWNLOAD=no && echo $DOWNLOAD"
+            sh """
+              echo "the PKG_FILE is not latest"
+              echo "so get the package ${PKG_FILE}"
               # this is comment in NOT LATEST
-		      pwd
-		      ls -lia
+              pwd
+              ls -lia
             """
-			println "AUTOREL is $AUTOREL"
+
           } else {
-		    def AUTOREL = "get-the-latest-package"
-		    sh """
-			  echo "the PKG_FILE IS latest"
-			  echo "so get latest"
-			  pwd
-			  ls -lia /tmp
-			  """
-			println "AUTOREL is $AUTOREL"
+            def AUTOREL = "DOWNLOAD=yes && echo $DOWNLOAD"
+            sh """
+              echo "the PKG_FILE IS latest"
+              echo "so get latest"
+              pwd
+              ls -lia /tmp
+            """
+            println "AUTOREL is $AUTOREL"
           }
-	    }
+        }
       }
     }
   }
