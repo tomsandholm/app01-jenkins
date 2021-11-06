@@ -6,15 +6,28 @@ def sayHello(String name = 'human') {
   echo "Hello, ${name}"
 }
 
-def findPKGs() {
-  def sout = new StringBuffer(), serr = new StringBuffer()
-  def proc = 'ls /var/lib/jenkins/packages'.execute()
-  proc.consumeProcessOutput(sout, serr)
-  proc.waitForOrKill(10000)
-  return sout.tokenize()
-}
+properties([
+  parameters([
+    [
+	  $class: 'ChoiceParameter',
+	  choiceType: 'PT_SINGLE_SELECT',
+	  description: 'Platform Package',
+	  filterable: false,
+	  name: 'PlatformPackage',
+	  script: [
+	    $class: 'GroovyScript',
+		fallbackScript: '',
+		script: '''// Find current platform packages
+          def sout = new StringBuffer(), serr = new StringBuffer()
+          def proc = 'ls /var/lib/jenkins/packages'.execute()
+          proc.consumeProcessOutput(sout, serr)
+          proc.waitForOrKill(10000)
+          return sout.tokenize()'''
+      ]
+	]
+  ])
+])
 
-def PKGs = findPKGs().join('\n')
 
 pipeline {
   agent any
