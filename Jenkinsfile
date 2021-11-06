@@ -1,12 +1,34 @@
 // vi:set nu ai ap aw smd showmatch tabstop=4 shiftwidth=4: 
 
-library 'jenkins-shared-library'
+// library 'jenkins-shared-library'
 
-def sayHello(String name = 'human') {
-  echo "Hello, ${name}"
-}
+// def sayHello(String name = 'human') {
+//   echo "Hello, ${name}"
+// }
 
-def selectPlatform = "['pkg_01','pkg_02']"
+properties([
+  parameters([
+    [
+	  $class: 'ChoiceParameter',
+	  choiceType: 'PT_SINGLE_SELECT',
+	  description: '',
+	  filterable: false,
+	  name: 'Platform',
+	  script: [
+	    $class: 'GroovyScript',
+		fallbackScript: '',
+		script: '''
+		  def sout = new StringBuffer()
+		  def serr = new StringBuffer()
+		  def proc = 'ls /var/lib/jenkins/package/pkg_*'.execute()
+		  proc.consumeProcessOutput(sout,serr)
+		  proc.waitForOrKill(10000)
+		  return sout.tokenize()
+        '''
+      ]
+    ]
+  ])
+])
 
 pipeline {
   agent any
@@ -14,14 +36,6 @@ pipeline {
     timestamps();
   }
 
-
-  parameters {
-	choice (
-	  name: 'Platforms',
-	  choices: selectPlatform.join("\n"),
-	  description: 'Select the Platform package'
-	)
-  }
 
   environment {
     CAUSE = "${currentBuild.getBuildCauses()[0].shortDescription}"
