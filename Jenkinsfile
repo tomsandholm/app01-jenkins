@@ -12,10 +12,12 @@ pipeline {
     timestamps();
   }
 
+  def CHOICES = ['pkg_01','pkg_02','pkg_03','pkg_04','latest']
+
   parameters {
 	choice (
 	  name: 'Platforms',
-	  choices: ['pkg_01','pkg_02','pkg_03','latest'],
+	  choices: ${CHOICES},
 	  description: 'Select the Platform package'
 	)
   }
