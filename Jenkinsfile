@@ -8,9 +8,9 @@ def sayHello(String name = 'human') {
 
 def getChoices() {
   sh """
-    out=$(ls /var/lib/jenkins/packages/pkg_* | xargs -n1 basename | cut -d'.' -f1 | sed "s/^/\'/g" | sed "s/$/\'/g")
-	new=$(echo $out | sed "s/ /,/g")
-	pkgs=$(echo "[ ${new} ]" )
+    out=`ls /var/lib/jenkins/packages/pkg_* | xargs -n1 basename | cut -d'.' -f1 | sed "s/^/\'/g" | sed "s/$/\'/g"`
+	new=`echo $out | sed "s/ /,/g"`
+	pkgs=`echo "[ ${new} ]" `
 	echo $pkgs
   """
 }
