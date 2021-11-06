@@ -1,32 +1,11 @@
 // vi:set nu ai ap aw smd showmatch tabstop=4 shiftwidth=4: 
 
-// library 'jenkins-shared-library'
+library 'jenkins-shared-library'
 
-// def sayHello(String name = 'human') {
-//   echo "Hello, ${name}"
-// }
+def sayHello(String name = 'human') {
+  echo "Hello, ${name}"
+}
 
-properties([
-  parameters([
-    [
-	  $class: 'ChoiceParameter',
-	  choiceType: 'PT_SINGLE_SELECT',
-	  description: 'Platform Package',
-	  filterable: false,
-	  name: 'PlatformPackage',
-	  script: [
-	    $class: 'GroovyScript',
-		fallbackScript: '',
-		script: '''// Find current platform packages
-          def sout = new StringBuffer(), serr = new StringBuffer()
-          def proc = 'ls /var/lib/jenkins/packages'.execute()
-          proc.consumeProcessOutput(sout, serr)
-          proc.waitForOrKill(10000)
-          return sout.tokenize()'''
-      ]
-	]
-  ])
-])
 
 
 pipeline {
@@ -43,7 +22,15 @@ pipeline {
       defaultValue: 'latest',
       name: 'PKG_FILE'
     )
-	choice(name: 'Package', choices: PKGs)
+	activeChoiceParam('Platform') {
+	  description('Select Platform Package')
+	  choiceType('RADIO')
+	  groovyScript {
+	    script("return['pkg_01.tar.gz','pkg_02.tar.gz','pkg_03.tar.gz','latest'')
+		fallbackScript('return ["error"]')
+	  }
+	}
+
   }
 
   environment {
