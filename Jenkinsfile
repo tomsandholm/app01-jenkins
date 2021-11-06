@@ -1,14 +1,5 @@
 // vi:set nu ai ap aw smd showmatch tabstop=4 shiftwidth=4: 
 
-properties([
-  parameters([
-    [
-	  $class: 'ChoiceParameter',
-	  choiceType: 'PT_SINGLE_SELECT',
-	  name: 'Platform',
-	  script: [
-	    
-
 library 'jenkins-shared-library'
 
 def sayHello(String name = 'human') {
