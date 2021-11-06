@@ -18,7 +18,7 @@ pipeline {
 	    What Platform to use \
 		""",
 	  defaultValue: 'latest',
-	  name: 'PKG_FILE'
+	  name: 'Platform'
 	)
   }
 
