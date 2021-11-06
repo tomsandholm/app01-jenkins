@@ -9,8 +9,6 @@ def sayHello(String name = 'human') {
   echo "Hello, ${name}"
 }
 
-
-
 pipeline {
   agent any
   options {
@@ -89,9 +87,10 @@ pipeline {
              ]
             )
           ]
-		)
+		  )
       }
     }
+  }
   }
 
   post {
