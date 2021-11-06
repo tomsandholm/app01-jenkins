@@ -34,6 +34,7 @@ properties([
             return sout.tokenize()
           '''
         ]
+      ]
     ]
   ])
 ])
