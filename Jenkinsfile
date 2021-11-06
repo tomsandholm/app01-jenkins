@@ -8,7 +8,7 @@ def sayHello(String name = 'human') {
 
 def getChoices() {
   sh """
-    ls /var/lib/jenkins/packages/pkg_*
+    ls /var/lib/jenkins/packages/pkg_* | xargs -n1 basename | cut -d'.' -f1
   """
 }
 
@@ -22,7 +22,7 @@ pipeline {
   parameters {
 	choice (
 	  name: 'Platforms',
-	  choices: [$(getChoices())],
+	  choices: getChoices(),
 	  description: 'Select the Platform package'
 	)
   }
