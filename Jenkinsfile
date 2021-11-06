@@ -56,42 +56,8 @@ pipeline {
           echo 'use single quotes Build caused by ${env.CAUSE}'
       }    
     }
+  }
 
-    stage('Parameters'){
-      steps {
-        script {
-          properties([
-            parameters([
-              [$class: 'ChoiceParameter',
-                  choiceType: 'PT_SINGLE_SELECT',
-                  description: 'Select Platform',
-                  filterLength: 1,
-                  filterable: false,
-                  name: 'Platform',
-                  script: [
-                    $class: 'GroovyScript',
-                    fallbackScript: [
-                      classpath: [],
-                      sandbox: false,
-                      script:
-                        "return['could not get packages']"
-                    ],
-                    script: [
-                      classpath: [],
-                      sandbox: false,
-                      script: 
-                        "return['pkg_01.tar.gz,','pkg_02.tar.gz','pkg_03.tar.gz']"
-                    ]
-                 ]
-               ]
-             ]
-            )
-          ]
-		  )
-      }
-    }
-  }
-  }
 
   post {
     always {
