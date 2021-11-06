@@ -57,17 +57,17 @@ pipeline {
       }    
     }
 
-	stage('Parameters'){
-	  steps {
-	    script {
-		  properties([
-		    parameters([
-			  [$class: 'ChoiceParameter',
-			      choiceType: 'PT_SINGLE_SELECT',
-				  description: 'Select Platform',
-				  filterLength: 1,
-				  filterable: false,
-				  name: 'Platform',
+    stage('Parameters'){
+      steps {
+        script {
+          properties([
+            parameters([
+              [$class: 'ChoiceParameter',
+                  choiceType: 'PT_SINGLE_SELECT',
+                  description: 'Select Platform',
+                  filterLength: 1,
+                  filterable: false,
+                  name: 'Platform',
                   script: [
                     $class: 'GroovyScript',
                     fallbackScript: [
@@ -77,18 +77,20 @@ pipeline {
                         "return['could not get packages']"
                     ],
                     script: [
-					  classpath: [],
-					  sandbox: false,
-					  script: 
-					    "return['pkg_01.tar.gz,','pkg_02.tar.gz','pkg_03.tar.gz']"
-					]
+                      classpath: [],
+                      sandbox: false,
+                      script: 
+                        "return['pkg_01.tar.gz,','pkg_02.tar.gz','pkg_03.tar.gz']"
+                    ]
                  ]
                ]
              ]
+            )
           ]
-        }
+		)
       }
     }
+  }
 
     stage('check PKG_FILE') {
       steps {
