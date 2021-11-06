@@ -13,12 +13,10 @@ pipeline {
   }
 
   parameters {
-    string ( 
-	  description: """ \
-	    What Platform to use \
-		""",
-	  defaultValue: 'latest',
-	  name: 'Platform'
+	choice (
+	  name: 'Platforms',
+	  choices: ['pkg_01','pkg_02','pkg_03','latest'],
+	  description: 'Select the Platform package'
 	)
   }
 
