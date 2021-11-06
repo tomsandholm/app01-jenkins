@@ -16,10 +16,11 @@ pipeline {
     timestamps();
   }
 
+
   parameters {
 	choice (
 	  name: 'Platforms',
-	  choices: Choices,
+	  choices: getChoices(),
 	  description: 'Select the Platform package'
 	)
   }
