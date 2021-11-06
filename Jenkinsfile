@@ -31,7 +31,7 @@ properties([
 		    def proc = 'ls /var/lib/jenkins/package/pkg_*'.execute()
             proc.consumeProcessOutput(sout,serr)
             proc.waitForOrKill(10000)
-            return sout.tokenize()
+            return[sout.tokenize()]
           '''
         ]
       ]
