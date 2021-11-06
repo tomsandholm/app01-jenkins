@@ -6,6 +6,7 @@ def sayHello(String name = 'human') {
   echo "Hello, ${name}"
 }
 
+def selectPlatform = "['pkg_01','pkg_02']"
 
 pipeline {
   agent any
@@ -13,7 +14,6 @@ pipeline {
     timestamps();
   }
 
-  def selectPlatform = ['pkg_01','pkg_02']
 
   parameters {
 	choice (
