@@ -26,7 +26,7 @@ pipeline {
 	  description('Select Platform Package')
 	  choiceType('RADIO')
 	  groovyScript {
-	    script("return['pkg_01.tar.gz','pkg_02.tar.gz','pkg_03.tar.gz','latest'')
+	    script("return['pkg_01.tar.gz','pkg_02.tar.gz','pkg_03.tar.gz','latest']")
 		fallbackScript('return ["error"]')
 	  }
 	}
