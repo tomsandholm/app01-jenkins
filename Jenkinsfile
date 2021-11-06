@@ -16,16 +16,24 @@ properties([
 	  name: 'Platform',
 	  script: [
 	    $class: 'GroovyScript',
-		fallbackScript: '',
-		script: '''
-		  def sout = new StringBuffer()
-		  def serr = new StringBuffer()
-		  def proc = 'ls /var/lib/jenkins/package/pkg_*'.execute()
-		  proc.consumeProcessOutput(sout,serr)
-		  proc.waitForOrKill(10000)
-		  return sout.tokenize()
-        '''
-      ]
+		fallbackScript: [
+		  classpath: [],
+		  sandbox: false,
+		  script:
+		    "return['could not get list']"
+        ],
+		script: [
+		  classpath: [],
+		  sandbox: false,
+		  script: '''
+		    def sout = new StringBuffer()
+		    def serr = new StringBuffer()
+		    def proc = 'ls /var/lib/jenkins/package/pkg_*'.execute()
+            proc.consumeProcessOutput(sout,serr)
+            proc.waitForOrKill(10000)
+            return sout.tokenize()
+          '''
+        ]
     ]
   ])
 ])
