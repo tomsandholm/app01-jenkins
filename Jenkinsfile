@@ -1,5 +1,8 @@
 // vi:set nu ai ap aw smd showmatch tabstop=4 shiftwidth=4: 
 
+import jenkins.model.*
+jenkins = Jenkins.instance
+
 library 'jenkins-shared-library'
 
 def sayHello(String name = 'human') {
