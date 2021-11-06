@@ -21,7 +21,7 @@ pipeline {
   parameters {
 	choice (
 	  name: 'Platforms',
-	  choices: [ "$getChoices" ],
+	  choices: [ getChoices() ],
 	  description: 'Select the Platform package'
 	)
   }
