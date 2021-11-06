@@ -13,7 +13,7 @@ pipeline {
     timestamps();
   }
 
-  selectPlatform = ['pkg_01','pkg_02']
+  def selectPlatform = ['pkg_01','pkg_02']
 
   parameters {
 	choice (
