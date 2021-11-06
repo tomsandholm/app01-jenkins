@@ -6,11 +6,7 @@ def sayHello(String name = 'human') {
   echo "Hello, ${name}"
 }
 
-def getChoices() {
-  sh """
-    ls /var/lib/jenkins/packages/pkg_* | xargs -n1 basename | cut -d'.' -f1
-  """
-}
+selectPlatform = ['pkg_01','pkg_02']
 
 pipeline {
   agent any
@@ -21,7 +17,7 @@ pipeline {
   parameters {
 	choice (
 	  name: 'Platforms',
-	  choices: [ getChoices() ],
+	  choices: selectPlatform.join("\n"),
 	  description: 'Select the Platform package'
 	)
   }
