@@ -1,102 +1,90 @@
 // vi:set nu ai ap aw smd showmatch tabstop=4 shiftwidth=4: 
-
-import jenkins.model.*
-jenkins = Jenkins.instance
-
-library 'jenkins-shared-library'
-
-def sayHello(String name = 'human') {
-  echo "Hello, ${name}"
-}
-
 pipeline {
-  agent any
-  options {
-    timestamps();
-  }
-
-  environment {
-    CAUSE = "${currentBuild.getBuildCauses()[0].shortDescription}"
-    GIT_REPO_NAME = env.GIT_URL.replaceFirst(/^.*\/([^\/]+?).git$/, '$1')
-    GIT_BRANCH_NAME = "${GIT_BRANCH.split('/').size() >1 ? GIT_BRANCH.split('/')[1..-1].join('/') : GIT_BRANCH}"
-  }
-
-  stages {
-
-    stage('checkout') {
-      steps {
-        buildDescription "repo: ${env.GIT_REPO_NAME}  branch: ${env.GIT_BRANCH_NAME}"
-        checkout scm
-      }
-    }
-
-    stage('setup') {
-      steps {
-        sh """
-          sudo apt-get install -y autoconf automake libtool checkinstall
-          autoreconf --verbose --install --force
-          ./configure
-        """
-      }
-    }
-
-    stage('build') {
-      steps {
-        sh """
-          make all
-          make dist
-          make package
-        """
-      }
-    }
-
-    stage('check parent') {
-      steps {
-          echo "Build caused by ${env.CAUSE}"
-          echo 'use single quotes Build caused by ${env.CAUSE}'
-      }    
-    }
-
-    stage('Parameters'){
-      steps {
-        script {
-          properties([
-            parameters([
-              [$class: 'ChoiceParameter',
-                  choiceType: 'PT_SINGLE_SELECT',
-                  description: 'Select Platform',
-                  filterLength: 1,
-                  filterable: false,
-                  name: 'Platform',
-                  script: [
-                    $class: 'GroovyScript',
-                    fallbackScript: [
-                      classpath: [],
-                      sandbox: false,
-                      script:
-                        "return['could not get packages']"
-                    ],
-                    script: [
-                      classpath: [],
-                      sandbox: false,
-                      script: 
-                        "return['pkg_01.tar.gz,','pkg_02.tar.gz','pkg_03.tar.gz']"
-                    ]
-                 ]
-               ]
-             ]
-            )
-          ]
-		  )
-      }
-    }
-  }
-  }
-
-  post {
-    always {
-      archiveArtifacts artifacts: 'app*.deb', onlyIfSuccessful: true
-      step([$class: 'WsCleanup'])
-    }
-  }
+    agent any
+        stages {
+            stage('Parameters'){
+                steps {
+                    script {
+                    properties([
+                            parameters([
+                                [$class: 'ChoiceParameter',
+                                    choiceType: 'PT_SINGLE_SELECT',
+                                    description: 'Select the Environemnt from the Dropdown List',
+                                    filterLength: 1,
+                                    filterable: false,
+                                    name: 'Env',
+                                    script: [
+                                        $class: 'GroovyScript',
+                                        fallbackScript: [
+                                            classpath: [],
+                                            sandbox: false,
+                                            script:
+                                                "return['Could not get The environemnts']"
+                                        ],
+                                        script: [
+                                            classpath: [],
+                                            sandbox: false,
+                                            script:
+                                                "return['dev','stage','prod']"
+                                        ]
+                                    ]
+                                ],
+                                [$class: 'CascadeChoiceParameter',
+                                    choiceType: 'PT_SINGLE_SELECT',
+                                    description: 'Select the AMI from the Dropdown List',
+                                    name: 'AMI List',
+                                    referencedParameters: 'Env',
+                                    script:
+                                        [$class: 'GroovyScript',
+                                        fallbackScript: [
+                                                classpath: [],
+                                                sandbox: false,
+                                                script: "return['Could not get Environment from Env Param']"
+                                                ],
+                                        script: [
+                                                classpath: [],
+                                                sandbox: false,
+                                                script: '''
+                                                if (Env.equals("dev")){
+                                                    return["ami-sd2345sd", "ami-asdf245sdf", "ami-asdf3245sd"]
+                                                }
+                                                else if(Env.equals("stage")){
+                                                    return["ami-sd34sdf", "ami-sdf345sdc", "ami-sdf34sdf"]
+                                                }
+                                                else if(Env.equals("prod")){
+                                                    return["ami-sdf34sdf", "ami-sdf34ds", "ami-sdf3sf3"]
+                                                }
+                                                '''
+                                            ]
+                                    ]
+                                ],
+                                [$class: 'DynamicReferenceParameter',
+                                    choiceType: 'ET_ORDERED_LIST',
+                                    description: 'Select the  AMI based on the following information',
+                                    name: 'Image Information',
+                                    referencedParameters: 'Env',
+                                    script:
+                                        [$class: 'GroovyScript',
+                                        script: 'return["Could not get AMi Information"]',
+                                        script: [
+                                            script: '''
+                                                    if (Env.equals("dev")){
+                                                        return["ami-sd2345sd:  AMI with Java", "ami-asdf245sdf: AMI with Python", "ami-asdf3245sd: AMI with Groovy"]
+                                                    }
+                                                    else if(Env.equals("stage")){
+                                                        return["ami-sd34sdf:  AMI with Java", "ami-sdf345sdc: AMI with Python", "ami-sdf34sdf: AMI with Groovy"]
+                                                    }
+                                                    else if(Env.equals("prod")){
+                                                        return["ami-sdf34sdf:  AMI with Java", "ami-sdf34ds: AMI with Python", "ami-sdf3sf3: AMI with Groovy"]
+                                                    }
+                                                    '''
+                                                ]
+                                        ]
+                                ]
+                            ])
+                        ])
+                    }
+                }
+            }
+        }
 }
