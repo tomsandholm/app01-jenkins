@@ -21,11 +21,15 @@ pipeline {
     timestamps();
   }
 
+  choices = sh (
+    script: "ls /var/lib/jenkins/packages/pkg_* | xargs -n1 basename | cut -d'.' -f1",
+	returnStatus: true
+  ) == 0
 
   parameters {
 	choice (
 	  name: 'Platforms',
-	  choices: getChoices(),
+	  choices: $choices,
 	  description: 'Select the Platform package'
 	)
   }
