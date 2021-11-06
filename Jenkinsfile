@@ -9,6 +9,7 @@ def sayHello(String name = 'human') {
 def getChoices() {
   sh """
     ls /var/lib/jenkins/packages/pkg_*
+  """
 }
 
 pipeline {
