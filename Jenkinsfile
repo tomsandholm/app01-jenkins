@@ -85,6 +85,7 @@ pipeline {
       steps {
           echo "Build caused by ${env.CAUSE}"
           echo 'use single quotes Build caused by ${env.CAUSE}'
+		  echo "Platform selection ${param.Platform}"
       }    
     }
   }
