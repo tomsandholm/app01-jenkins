@@ -1,10 +1,10 @@
 // vi:set nu ai ap aw smd showmatch tabstop=4 shiftwidth=4: 
 
-library 'jenkins-shared-library'
+// library 'jenkins-shared-library'
 
-def sayHello(String name = 'human') {
-  echo "Hello, ${name}"
-}
+// def sayHello(String name = 'human') {
+//   echo "Hello, ${name}"
+// }
 
 properties([
   parameters([
@@ -85,8 +85,6 @@ pipeline {
       steps {
           echo "Build caused by ${env.CAUSE}"
           echo 'use single quotes Build caused by ${env.CAUSE}'
-          sayHello 'Thomas'
-          helloWorld 'this is from the jenkins-shared-library'
           echo "Value of PKG_FILE is ${PKG_FILE}"
       }    
     }
