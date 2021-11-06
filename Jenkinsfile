@@ -56,7 +56,6 @@ pipeline {
       steps {
           echo "Build caused by ${env.CAUSE}"
           echo 'use single quotes Build caused by ${env.CAUSE}'
-          echo "Value of PKG_FILE is ${PKG_FILE}"
       }    
     }
 
@@ -95,33 +94,6 @@ pipeline {
     }
   }
 
-    stage('check PKG_FILE') {
-      steps {
-        script {
-          if ( "$PKG_FILE" != "latest" ) {
-            def AUTOREL = "DOWNLOAD=no && echo $DOWNLOAD"
-            sh """
-              echo "the PKG_FILE is not latest"
-              echo "so get the package ${PKG_FILE}"
-              # this is comment in NOT LATEST
-              pwd
-              ls -lia
-            """
-
-          } else {
-            def AUTOREL = "DOWNLOAD=yes && echo $DOWNLOAD"
-            sh """
-              echo "the PKG_FILE IS latest"
-              echo "so get latest"
-              pwd
-              ls -lia /tmp
-            """
-            println "AUTOREL is $AUTOREL"
-          }
-        }
-      }
-    }
-  }
   post {
     always {
       archiveArtifacts artifacts: 'app*.deb', onlyIfSuccessful: true
