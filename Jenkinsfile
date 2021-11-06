@@ -7,7 +7,8 @@ def sayHello(String name = 'human') {
 }
 
 def getChoices() {
-   return ['pkg_01','pkg_02','latest']
+  sh """
+    ls /var/lib/jenkins/packages/pkg_*
 }
 
 pipeline {
