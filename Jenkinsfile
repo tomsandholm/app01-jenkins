@@ -29,7 +29,7 @@ pipeline {
   parameters {
 	choice (
 	  name: 'Platforms',
-	  choices: $choices,
+	  choices: [ "$choices" ],
 	  description: 'Select the Platform package'
 	)
   }
