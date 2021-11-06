@@ -6,13 +6,14 @@ def sayHello(String name = 'human') {
   echo "Hello, ${name}"
 }
 
-selectPlatform = ['pkg_01','pkg_02']
 
 pipeline {
   agent any
   options {
     timestamps();
   }
+
+  selectPlatform = ['pkg_01','pkg_02']
 
   parameters {
 	choice (
