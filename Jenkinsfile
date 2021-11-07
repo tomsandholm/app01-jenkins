@@ -12,11 +12,13 @@ pipeline {
     timestamps();
   }
 
+  choice = "['latest', 'pkg_01','pkg_02','pkg_03','pkg_04']"
+
   parameters {
     choice (
 	  name: 'Platform',
 	  description: 'Specify the Platform version',
-	  choices: ['latest', 'pkg_01','pkg_02','pkg_03','pkg_04']
+	  choices: "$choice"
     )
   }
 
