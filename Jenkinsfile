@@ -15,7 +15,6 @@ pipeline {
   }
 
   environment {
-    choice = "['latest', 'pkg_01','pkg_02','pkg_03','pkg_04']"
     CAUSE = "${currentBuild.getBuildCauses()[0].shortDescription}"
     GIT_REPO_NAME = env.GIT_URL.replaceFirst(/^.*\/([^\/]+?).git$/, '$1')
     GIT_BRANCH_NAME = "${GIT_BRANCH.split('/').size() >1 ? GIT_BRANCH.split('/')[1..-1].join('/') : GIT_BRANCH}"
@@ -87,7 +86,7 @@ pipeline {
       steps {
           echo "Build caused by ${env.CAUSE}"
           echo 'use single quotes Build caused by ${env.CAUSE}'
-		  echo "Platform selection ${params.Platform}"
+		  echo "Platform selection ${Platform}"
       }    
     }
   }
