@@ -6,6 +6,8 @@
 //   echo "Hello, ${name}"
 // }
 
+def choice = "['latest', 'pkg_01','pkg_02','pkg_03','pkg_04']"
+
 pipeline {
   agent any
   options {
@@ -18,8 +20,6 @@ pipeline {
     GIT_REPO_NAME = env.GIT_URL.replaceFirst(/^.*\/([^\/]+?).git$/, '$1')
     GIT_BRANCH_NAME = "${GIT_BRANCH.split('/').size() >1 ? GIT_BRANCH.split('/')[1..-1].join('/') : GIT_BRANCH}"
   }
-
-  def choice = "['latest', 'pkg_01','pkg_02','pkg_03','pkg_04']"
 
   parameters {
     choice (
