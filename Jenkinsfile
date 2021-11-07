@@ -23,7 +23,7 @@ pipeline {
     choice (
 	  name: 'Platform',
 	  description: 'Specify the Platform version',
-	  choices: "$choice"
+	  choices: "${env.choice}"
     )
   }
 
