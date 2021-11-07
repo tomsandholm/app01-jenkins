@@ -8,6 +8,35 @@
 
 def choice = "['latest', 'pkg_01','pkg_02','pkg_03','pkg_04']"
 
+properties([
+    parameters([
+        [$class: 'ChoiceParameter', 
+            choiceType: 'PT_SINGLE_SELECT', 
+            description: 'Select the Platform version', 
+            filterLength: 1, 
+            filterable: true, 
+            name: 'Platform', 
+            randomName: 'choice-parameter-5631314439613978', 
+            script: [
+                $class: 'GroovyScript', 
+                fallbackScript: [
+                    classpath: [], 
+                    sandbox: false, 
+                    script: 
+                        'return[\'Could not get Platform\']'
+                ], 
+                script: [
+                    classpath: [], 
+                    sandbox: false, 
+                    script: 
+                        'return["latest","pkg_01","pkg_02","pkg_03"]'
+                ]
+            ]
+        ], 
+    ])
+])
+
+
 pipeline {
   agent any
   options {
@@ -21,39 +50,6 @@ pipeline {
   }
 
   stages {
-
-    stage('forms') {
-      steps {
-        script {
-          properties ([
-            parameters([
-              [$class: 'ChoiceParameter',
-                  choiceType: 'PT_SINGLE_SELECT',
-                  description: 'Specify Platform Version',
-                  filterLength: 1,
-                  filterable: false,
-                  name: 'Platform',
-                  script: [
-                    $class: 'GroovyScript',
-                    fallbackScript: [
-                      classpath: [],
-                      sandbox: false,
-                      script:
-                        'return[\'could not get list\']'
-                    ],
-                    script: [
-                      classpath: [],
-                      sandbox: false,
-                      script:
-                        'return ["latest", "pkg_01","pkg_02","pkg_03","pkg_04"]'
-                    ]
-                  ]
-              ]
-            ])
-          ])
-        }
-      }
-    }
 
     stage('checkout') {
       steps {
