@@ -6,12 +6,17 @@
 //   echo "Hello, ${name}"
 // }
 
-def  choice = "['latest', 'pkg_01','pkg_02','pkg_03','pkg_04']"
-
 pipeline {
   agent any
   options {
     timestamps();
+  }
+
+  environment {
+    choice = "['latest', 'pkg_01','pkg_02','pkg_03','pkg_04']"
+    CAUSE = "${currentBuild.getBuildCauses()[0].shortDescription}"
+    GIT_REPO_NAME = env.GIT_URL.replaceFirst(/^.*\/([^\/]+?).git$/, '$1')
+    GIT_BRANCH_NAME = "${GIT_BRANCH.split('/').size() >1 ? GIT_BRANCH.split('/')[1..-1].join('/') : GIT_BRANCH}"
   }
 
   parameters {
@@ -20,12 +25,6 @@ pipeline {
 	  description: 'Specify the Platform version',
 	  choices: "$choice"
     )
-  }
-
-  environment {
-    CAUSE = "${currentBuild.getBuildCauses()[0].shortDescription}"
-    GIT_REPO_NAME = env.GIT_URL.replaceFirst(/^.*\/([^\/]+?).git$/, '$1')
-    GIT_BRANCH_NAME = "${GIT_BRANCH.split('/').size() >1 ? GIT_BRANCH.split('/')[1..-1].join('/') : GIT_BRANCH}"
   }
 
   stages {
