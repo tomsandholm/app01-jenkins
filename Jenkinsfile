@@ -6,13 +6,13 @@
 //   echo "Hello, ${name}"
 // }
 
+def  choice = "['latest', 'pkg_01','pkg_02','pkg_03','pkg_04']"
+
 pipeline {
   agent any
   options {
     timestamps();
   }
-
-  choice = "['latest', 'pkg_01','pkg_02','pkg_03','pkg_04']"
 
   parameters {
     choice (
