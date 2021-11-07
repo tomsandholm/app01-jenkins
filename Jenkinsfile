@@ -19,21 +19,17 @@ pipeline {
     GIT_BRANCH_NAME = "${GIT_BRANCH.split('/').size() >1 ? GIT_BRANCH.split('/')[1..-1].join('/') : GIT_BRANCH}"
   }
 
+  def choice = "['latest', 'pkg_01','pkg_02','pkg_03','pkg_04']"
+
+  parameters {
+    choice (
+      name: 'Platform',
+      description: 'Specify the Platform version',
+      choices: "${choice}"
+    )
+  }
 
   stages {
-
-    stage('first') {
-	  script {
-        choice = "['latest', 'pkg_01','pkg_02','pkg_03','pkg_04']"
-      }
-      parameters {
-        choice (
-    	  name: 'Platform',
-    	  description: 'Specify the Platform version',
-    	  choices: "${choice}"
-        )
-      }
-	}
 
     stage('checkout') {
       steps {
