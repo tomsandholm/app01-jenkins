@@ -39,13 +39,13 @@ pipeline {
                       classpath: [],
                       sandbox: false,
                       script:
-                        "return['could not get list']"
+                        'return[\'could not get list\']'
                     ],
                     script: [
                       classpath: [],
                       sandbox: false,
                       script:
-                        "return ['latest', 'pkg_01','pkg_02','pkg_03','pkg_04']"
+                        'return ["latest", "pkg_01","pkg_02","pkg_03","pkg_04"]'
                     ]
                   ]
               ]
@@ -86,7 +86,7 @@ pipeline {
       steps {
           echo "Build caused by ${env.CAUSE}"
           echo 'use single quotes Build caused by ${env.CAUSE}'
-		  echo "Platform selection ${Platform}"
+		  echo "Platform selection ${params.Platform}"
       }    
     }
   }
