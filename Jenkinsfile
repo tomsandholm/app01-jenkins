@@ -1,4 +1,4 @@
-// vi:set nu ai ap aw smd showmatch tabstop=4 shiftwidth=4: 
+// vi:set nu ap aw smd showmatch tabstop=4 shiftwidth=4: 
 
 // library 'jenkins-shared-library'
 
@@ -30,6 +30,39 @@ pipeline {
   }
 
   stages {
+
+    stage('forms') {
+      steps {
+        script {
+          properties ([
+            parameters([
+              [$class: 'ChoiceParameter',
+                  choiceType: 'PT_SINGLE_SELECT',
+                  description: 'Specify Platform Version',
+                  filterLength: 1,
+                  filterable: false,
+                  name: 'Platform',
+                  script: [
+                    $class: 'GroovyScript',
+                    fallbackScript: [
+                      classpath: [],
+                      sandbox: false,
+                      script:
+                        "return['could not get list']"
+                    ],
+                    script: [
+                      classpath: [],
+                      sandbox: false,
+                      script:
+                        "return ['latest', 'pkg_01','pkg_02','pkg_03','pkg_04']"
+                    ]
+                  ]
+              ]
+            ])
+          ])
+        }
+      }
+    }
 
     stage('checkout') {
       steps {
