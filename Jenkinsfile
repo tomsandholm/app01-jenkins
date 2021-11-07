@@ -6,45 +6,19 @@
 //   echo "Hello, ${name}"
 // }
 
-properties([
-  parameters([
-    [
-	  $class: 'ChoiceParameter',
-	  choiceType: 'PT_SINGLE_SELECT',
-	  description: '',
-	  filterable: false,
-	  name: 'Platform',
-	  script: [
-	    $class: 'GroovyScript',
-		fallbackScript: [
-		  classpath: [],
-		  sandbox: false,
-		  script:
-		    "return['could not get list']"
-        ],
-		script: [
-		  classpath: [],
-		  sandbox: false,
-		  script: '''
-		    def sout = new StringBuffer()
-		    def serr = new StringBuffer()
-		    def proc = 'ls /var/lib/jenkins/package/pkg_*'.execute()
-            proc.consumeProcessOutput(sout,serr)
-            proc.waitForOrKill(10000)
-            return[sout.tokenize()]
-          '''
-        ]
-      ]
-    ]
-  ])
-])
-
 pipeline {
   agent any
   options {
     timestamps();
   }
 
+  parameters {
+    choice (
+	  name: 'Platform',
+	  description: 'Specify the Platform version',
+	  choices: ['latest', 'pkg_01','pkg_02','pkg_03','pkg_04']
+    )
+  }
 
   environment {
     CAUSE = "${currentBuild.getBuildCauses()[0].shortDescription}"
