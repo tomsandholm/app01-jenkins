@@ -21,14 +21,6 @@ pipeline {
     GIT_BRANCH_NAME = "${GIT_BRANCH.split('/').size() >1 ? GIT_BRANCH.split('/')[1..-1].join('/') : GIT_BRANCH}"
   }
 
-  parameters {
-    choice (
-      name: 'Platform',
-      description: 'Specify the Platform version',
-      choices: "${choice}"
-    )
-  }
-
   stages {
 
     stage('forms') {
