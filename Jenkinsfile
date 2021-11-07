@@ -6,15 +6,13 @@
 //   echo "Hello, ${name}"
 // }
 
-def choice = "['latest', 'pkg_01','pkg_02','pkg_03','pkg_04']"
-
 properties([
     parameters([
         [$class: 'ChoiceParameter', 
             choiceType: 'PT_SINGLE_SELECT', 
             description: 'Select the Platform version', 
             filterLength: 1, 
-            filterable: true, 
+            filterable: false, 
             name: 'Platform', 
             randomName: 'choice-parameter-5631314439613978', 
             script: [
