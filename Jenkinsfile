@@ -22,7 +22,6 @@ pipeline {
 
     stage('stage 1') {
       steps {
-        step {
           script {
             try {
               sh 'exit 0'
@@ -31,7 +30,6 @@ pipeline {
               sh 'echo we handled the exception'
             }
           }
-        }
       }
     }
   }
