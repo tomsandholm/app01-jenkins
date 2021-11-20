@@ -3,7 +3,7 @@
 // library 'jenkins-shared-library'
 
 // def sayHello(String name = 'human') {
-//   echo "Hello, ${name}"
+//    echo "Hello, ${name}"
 // }
 
 properties([
@@ -27,7 +27,7 @@ properties([
                     classpath: [], 
                     sandbox: false, 
                     script: 
-                        'return["latest","pkg_01","pkg_02","pkg_03"]'
+                        'return["latest","pkg_01","pkg_02","pkg_03","pkg_04"]'
                 ]
             ]
         ], 
@@ -38,8 +38,8 @@ properties([
 pipeline {
   agent any
   options {
-    timestamps();
-  }
+    timestamps()
+  }  
 
   environment {
     CAUSE = "${currentBuild.getBuildCauses()[0].shortDescription}"
