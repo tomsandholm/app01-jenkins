@@ -1,19 +1,45 @@
-// vi:set nu ai ap aw smd showmatch tabstop=4 shiftwidth=4: 
+// vi:set nu ap aw smd showmatch tabstop=4 shiftwidth=4: 
 
-import jenkins.model.*
-jenkins = Jenkins.instance
+// library 'jenkins-shared-library'
 
-library 'jenkins-shared-library'
+// def sayHello(String name = 'human') {
+//    echo "Hello, ${name}"
+// }
 
-def sayHello(String name = 'human') {
-  echo "Hello, ${name}"
-}
+properties([
+    parameters([
+        [$class: 'ChoiceParameter', 
+            choiceType: 'PT_SINGLE_SELECT', 
+            description: 'Select the Platform version', 
+            filterLength: 1, 
+            filterable: false, 
+            name: 'Platform', 
+            randomName: 'choice-parameter-5631314439613978', 
+            script: [
+                $class: 'GroovyScript', 
+                fallbackScript: [
+                    classpath: [], 
+                    sandbox: false, 
+                    script: 
+                        'return[\'Could not get Platform\']'
+                ], 
+                script: [
+                    classpath: [], 
+                    sandbox: false, 
+                    script: 
+                        'return["latest","pkg_01","pkg_02","pkg_03","pkg_04"]'
+                ]
+            ]
+        ], 
+    ])
+])
+
 
 pipeline {
   agent any
   options {
-    timestamps();
-  }
+    timestamps()
+  }  
 
   environment {
     CAUSE = "${currentBuild.getBuildCauses()[0].shortDescription}"
@@ -54,44 +80,11 @@ pipeline {
       steps {
           echo "Build caused by ${env.CAUSE}"
           echo 'use single quotes Build caused by ${env.CAUSE}'
+		  echo "Platform selection ${params.Platform}"
       }    
     }
+  }
 
-    stage('Parameters'){
-      steps {
-        script {
-          properties([
-            parameters([
-              [$class: 'ChoiceParameter',
-                  choiceType: 'PT_SINGLE_SELECT',
-                  description: 'Select Platform',
-                  filterLength: 1,
-                  filterable: false,
-                  name: 'Platform',
-                  script: [
-                    $class: 'GroovyScript',
-                    fallbackScript: [
-                      classpath: [],
-                      sandbox: false,
-                      script:
-                        "return['could not get packages']"
-                    ],
-                    script: [
-                      classpath: [],
-                      sandbox: false,
-                      script: 
-                        "return['pkg_01.tar.gz,','pkg_02.tar.gz','pkg_03.tar.gz']"
-                    ]
-                 ]
-               ]
-             ]
-            )
-          ]
-		  )
-      }
-    }
-  }
-  }
 
   post {
     always {
