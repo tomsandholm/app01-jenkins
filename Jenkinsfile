@@ -27,9 +27,8 @@ pipeline {
         sh 'echo "Step 3"'
       }
       try {
-        sh 'exit 1'
-      }
-      catch (err) {
+        sh 'exit 0'
+      } catch (err) {
         echo "Something didn't work"
       }
     }
