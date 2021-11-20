@@ -21,10 +21,13 @@ pipeline {
   stages {
 
     stage('stage 1') {
-      try {
-        sh 'exit 0'
-      } catch (err) {
-        echo "Something didn't work"
+      script {
+        try {
+          sh 'exit 0'
+        } catch (Exception e) {
+          echo 'Exception occured: ' + e.toString()
+          sh 'echo we handled the exception'
+        }
       }
     }
   }
