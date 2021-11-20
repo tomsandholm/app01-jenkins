@@ -30,7 +30,7 @@ pipeline {
         sh 'exit 1'
       }
       catch (exc) {
-        echo 'Something didn't work'
+        echo "Something didn't work"
         throw
       }
     }
