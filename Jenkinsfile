@@ -6,35 +6,6 @@
 //    echo "Hello, ${name}"
 // }
 
-properties([
-    parameters([
-        [$class: 'ChoiceParameter', 
-            choiceType: 'PT_SINGLE_SELECT', 
-            description: 'Select the Platform version', 
-            filterLength: 1, 
-            filterable: false, 
-            name: 'Platform', 
-            randomName: 'choice-parameter-5631314439613978', 
-            script: [
-                $class: 'GroovyScript', 
-                fallbackScript: [
-                    classpath: [], 
-                    sandbox: false, 
-                    script: 
-                        'return[\'Could not get Platform\']'
-                ], 
-                script: [
-                    classpath: [], 
-                    sandbox: false, 
-                    script: 
-                        'return["latest","pkg_01","pkg_02","pkg_03","pkg_04"]'
-                ]
-            ]
-        ], 
-    ])
-])
-
-
 pipeline {
   agent any
   options {
@@ -49,46 +20,18 @@ pipeline {
 
   stages {
 
-    stage('checkout') {
+    stage('stage 1') {
       steps {
-        buildDescription "repo: ${env.GIT_REPO_NAME}  branch: ${env.GIT_BRANCH_NAME}"
-        checkout scm
+        sh 'echo "Step 1"'
+        sh 'echo "Step 2"'
+        sh 'echo "Step 3"'
       }
-    }
-
-    stage('setup') {
-      steps {
-        sh """
-          sudo apt-get install -y autoconf automake libtool checkinstall
-          autoreconf --verbose --install --force
-          ./configure
-        """
-      }
-    }
-
-    stage('build') {
-      steps {
-        sh """
-          make all
-          make dist
-          make package
-        """
-      }
-    }
-
-    stage('check parent') {
-      steps {
-          echo "Build caused by ${env.CAUSE}"
-          echo 'use single quotes Build caused by ${env.CAUSE}'
-		  echo "Platform selection ${params.Platform}"
-      }    
     }
   }
 
 
   post {
     always {
-      archiveArtifacts artifacts: 'app*.deb', onlyIfSuccessful: true
       step([$class: 'WsCleanup'])
     }
   }
