@@ -24,7 +24,7 @@ pipeline {
       steps {
         sh 'echo "Step 1"'
         sh 'echo "Step 2"'
-        sh 'exit 1'
+        sh 'exit 0'
         sh 'echo "Step 3"'
       }
     }
