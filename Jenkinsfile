@@ -21,11 +21,6 @@ pipeline {
   stages {
 
     stage('stage 1') {
-      steps {
-        sh 'echo "Step 1"'
-        sh 'echo "Step 2"'
-        sh 'echo "Step 3"'
-      }
       try {
         sh 'exit 0'
       } catch (err) {
