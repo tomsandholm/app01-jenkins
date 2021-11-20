@@ -29,9 +29,8 @@ pipeline {
       try {
         sh 'exit 1'
       }
-      catch (exc) {
+      catch (err) {
         echo "Something didn't work"
-        throw
       }
     }
   }
