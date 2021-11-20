@@ -24,7 +24,7 @@ pipeline {
       steps {
           script {
             try {
-              sh 'exit 0'
+              sh 'exit 1'
             } catch (Exception e) {
               echo 'Exception occured: ' + e.toString()
               sh 'echo we handled the exception'
